@@ -1,105 +1,26 @@
-const vehicles = ["Citroën Ami","XEV Yoyo","Renault Twizy","X-Trail","Volta EV1","Volta EV2"];
-const types = ["Batarya Değişimi","Menzil Artırma","Batarya Arızası"];
-let selectedVehicle = "";
-let selectedType = "";
-
-const vehicleGrid = document.getElementById("vehicle-grid");
-const typeGrid = document.getElementById("type-grid");
-const summary = document.getElementById("selection-summary");
-const details = document.getElementById("project-details");
-const whatsappBtn = document.getElementById("whatsapp-btn");
-
-vehicles.forEach(v => {
-  const b = document.createElement("button");
-  b.textContent = v;
-  b.addEventListener("click", () => {
-    selectedVehicle = v;
-    [...vehicleGrid.children].forEach(x => x.classList.remove("selected"));
-    b.classList.add("selected");
-    updateSummary();
-  });
-  vehicleGrid.appendChild(b);
-});
-
-typeGrid.querySelectorAll("button").forEach(b => {
-  b.addEventListener("click", () => {
-    selectedType = b.dataset.type;
-    typeGrid.querySelectorAll("button").forEach(x => x.classList.remove("selected"));
-    b.classList.add("selected");
-    updateSummary();
-  });
-});
-
-function updateSummary(){
-  if(!selectedVehicle || !selectedType){
-    summary.textContent = "Araç ve çözüm türü seçilmedi.";
-    whatsappBtn.disabled = true;
-    return;
-  }
-  summary.textContent = `${selectedVehicle} · ${selectedType}`;
-  whatsappBtn.disabled = false;
-}
-
-whatsappBtn.addEventListener("click", () => {
-  const text = `Merhaba BaterFace, Çözüm Talebi oluşturmak istiyorum.%0A%0AAraç: ${selectedVehicle}%0AÇözüm: ${selectedType}%0AProje detayları: ${details.value || "Belirtilmedi"}%0A%0ADetaylı bilgi ve fiyat almak istiyorum.`;
-  const phone = "905XXXXXXXXX"; // BURAYA WhatsApp numarasını yaz
-  window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
-});
-
-const modal = document.getElementById("vehicle-modal");
-document.getElementById("suggest-vehicle").addEventListener("click", () => modal.classList.add("show"));
-document.getElementById("modal-close").addEventListener("click", () => modal.classList.remove("show"));
-modal.addEventListener("click", e => { if(e.target === modal) modal.classList.remove("show"); });
-
-document.getElementById("suggestion-send").addEventListener("click", () => {
-  const value = document.getElementById("suggestion-input").value.trim();
-  if(!value) return;
-  alert(`"${value}" araç önerisi alındı.`);
-  document.getElementById("suggestion-input").value = "";
-  modal.classList.remove("show");
-});
-
-document.querySelector(".menu-btn").addEventListener("click", () => {
-  document.getElementById("nav").classList.toggle("open");
-});
-
-document.querySelectorAll(".nav a").forEach(a => {
-  a.addEventListener("click", () => document.getElementById("nav").classList.remove("open"));
-});
-
-const projectSteps = [
-  {k:"01 · ARAÇ", title:"Citroën Ami", text:"Aracın mevcut yapısı incelenir ve uygulama alanları belirlenir.", cls:""},
-  {k:"02 · TAMPON SÖKÜMÜ", title:"Tampon Sökümü", text:"Arka tampon ve bağlantıları kontrollü şekilde ayrılır. Gerçek proje görselleri bu aşamada kullanılacak.", cls:"open"},
-  {k:"03 · EK BATARYA", title:"Ek Batarya", text:"BaterFace ek batarya paketi aracın arka bölümündeki uygun alana yerleştirilir.", cls:"battery"},
-  {k:"04 · MONTAJ", title:"Montaj", text:"Batarya bağlantıları ve montaj elemanları kontrol edilir, sistem araç yapısına entegre edilir.", cls:"mount"},
-  {k:"05 · TAMAMLANAN PROJE", title:"Tamamlanan Proje", text:"Sistem tamamlanır ve araç günlük kullanıma hazır hale getirilir.", cls:"done"}
+const vehicles=['Citroën Ami','XEV Yoyo','Renault Twizy','X-Trail','Volta EV1','Volta EV2'];
+let selectedVehicle='',selectedType='';
+const vehicleGrid=document.getElementById('vehicle-grid');
+const typeGrid=document.getElementById('type-grid');
+const summary=document.getElementById('selection-summary');
+const whatsappBtn=document.getElementById('whatsapp-btn');
+vehicles.forEach(v=>{const b=document.createElement('button');b.textContent=v;b.type='button';b.onclick=()=>{selectedVehicle=v;vehicleGrid.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');updateForm()};vehicleGrid.appendChild(b)});
+typeGrid.querySelectorAll('button').forEach(b=>b.onclick=()=>{selectedType=b.dataset.type;typeGrid.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');updateForm()});
+function updateForm(){const ok=selectedVehicle&&selectedType;summary.textContent=ok?`${selectedVehicle} · ${selectedType}`:'Araç ve çözüm türü seçilmedi.';whatsappBtn.disabled=!ok}
+const details=document.getElementById('project-details'),count=document.getElementById('char-count');details.addEventListener('input',()=>count.textContent=details.value.length);
+whatsappBtn.onclick=()=>{if(whatsappBtn.disabled)return;const phone='905XXXXXXXXX';const text=`Merhaba BaterFace, Çözüm Talebi oluşturmak istiyorum.\n\nAraç: ${selectedVehicle}\nÇözüm: ${selectedType}\nProje detayları: ${details.value||'Belirtilmedi'}\n\nDetaylı bilgi ve fiyat almak istiyorum.`;window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank')};
+const modal=document.getElementById('vehicle-modal');document.getElementById('suggest-vehicle').onclick=()=>modal.classList.add('show');document.getElementById('modal-close').onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')};document.getElementById('suggestion-send').onclick=()=>{const v=document.getElementById('suggestion-input').value.trim();if(v){alert(`${v} araç önerisi alındı.`);document.getElementById('suggestion-input').value='';modal.classList.remove('show')}};
+const menu=document.querySelector('.menu-btn');menu.onclick=()=>document.getElementById('nav').classList.toggle('open');document.querySelectorAll('#nav a').forEach(a=>a.onclick=()=>document.getElementById('nav').classList.remove('open'));
+const caseSticky=document.querySelector('.case-sticky');const steps=[...document.querySelectorAll('.case-step')];const kicker=document.getElementById('case-kicker'),title=document.getElementById('case-title'),text=document.getElementById('case-text'),specs=document.getElementById('case-specs');
+const caseData=[
+['01','Citroën Ami','Aracın mevcut yapısı, bağlantı noktaları ve batarya yerleşimi incelenir.',['Proje','Menzil artırma'],['Uygulama','Araca özel']],
+['02','Tampon Sökümü','Arka tampon kontrollü biçimde sökülür ve bağlantı noktaları açığa çıkarılır.',['İşlem','Tampon sökümü'],['Kontrol','Bağlantı noktaları']],
+['03','Batarya Erişimi','Ek bataryanın konumlandırılacağı alan ve kablo güzergâhı hazırlanır.',['Alan','Arka bölüm'],['Yaklaşım','Özel entegrasyon']],
+['04','Ek Batarya Montajı','BaterFace ek batarya paketi uygun bağlantı ve sabitleme elemanlarıyla monte edilir.',['Paket','Ek batarya'],['Montaj','Araca özel']],
+['05','Montaj Kontrolü','Elektriksel bağlantılar, mekanik sabitleme ve sistem kontrolleri gerçekleştirilir.',['Test','Bağlantı kontrolü'],['Güvenlik','Kontrollü']],
+['06','Tamamlanan Proje','Tampon yerine alınır, son kontroller yapılır ve araç teslim aşamasına gelir.',['Sonuç','Menzil artırma'],['Teslim','Kontrol edilmiş']]
 ];
-
-const amiVisual = document.querySelector(".ami-visual");
-const kicker = document.getElementById("ami-kicker");
-const amiTitle = document.getElementById("ami-title");
-const amiText = document.getElementById("ami-text");
-const amiSpecs = document.getElementById("ami-specs");
-
-function setProjectStep(i){
-  const s = projectSteps[i];
-  document.querySelectorAll(".step").forEach((x,n)=>x.classList.toggle("active",n===i));
-  amiVisual.className = "ami-visual " + s.cls;
-  kicker.textContent = s.k;
-  amiTitle.textContent = s.title;
-  amiText.textContent = s.text;
-  amiSpecs.innerHTML = i >= 2
-    ? `<div><span>Batarya</span><b>Proje verisiyle güncellenecek</b></div>
-       <div><span>Kapasite</span><b>Proje verisiyle güncellenecek</b></div>
-       <div><span>Montaj</span><b>Araca özel</b></div>`
-    : `<div><span>Proje</span><b>Menzil Artırma</b></div>
-       <div><span>Yaklaşım</span><b>Araca özel</b></div>`;
-}
-document.querySelectorAll(".step").forEach(b => b.addEventListener("click",()=>setProjectStep(Number(b.dataset.step))));
-setProjectStep(0);
-
-// İletişim WhatsApp linki
-document.getElementById("contact-whatsapp").addEventListener("click", e => {
-  e.preventDefault();
-  window.open("https://wa.me/905XXXXXXXXX", "_blank"); // BURAYA WhatsApp numarasını yaz
-});
+function setStep(i){const d=caseData[i];steps.forEach((s,n)=>s.classList.toggle('active',n===i));caseSticky.className='case-sticky step-'+i;kicker.textContent=d[0];title.textContent=d[1];text.textContent=d[2];specs.innerHTML=`<div><span>${d[3][0]}</span><b>${d[3][1]}</b></div><div><span>${d[4][0]}</span><b>${d[4][1]}</b></div>`}
+steps.forEach(s=>s.onclick=()=>setStep(Number(s.dataset.step)));setStep(0);
+const caseSection=document.getElementById('ami-projesi');let ticking=false;window.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{if(window.innerWidth>900){const r=caseSection.getBoundingClientRect();const max=Math.max(1,caseSection.offsetHeight-window.innerHeight);const p=Math.min(0.999,Math.max(0,(window.scrollY-(caseSection.offsetTop-80))/max));const i=Math.min(5,Math.floor(p*6));setStep(i)}ticking=false})});
+const navLinks=[...document.querySelectorAll('#nav a')];const sections=[...document.querySelectorAll('main section[id]')];const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{threshold:.45});sections.forEach(s=>obs.observe(s));
