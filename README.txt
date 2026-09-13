@@ -1,16 +1,10 @@
-BATERFACE WEBSITE
-=================
+BaterFace final website package.
 
-GitHub Pages için başlangıç sürümü.
+Upload these files directly to the root of baterface/baterface.github.io:
+index.html
+style.css
+script.js
 
-Dosyalar:
-- index.html
-- style.css
-- script.js
-
-ÖNEMLİ:
-1. Gerçek BaterFace logosunu assets/logo/baterface-logo.png olarak ekleyip header'daki text logo ile değiştirebilirsin.
-2. script.js içinde 905XXXXXXXXX olan iki yeri gerçek WhatsApp numaranla değiştir.
-3. index.html içinde BURAYA_EMAIL ve BURAYA_ADRES alanlarını değiştir.
-4. Ami bölümündeki çizim geçici prototiptir. Gerçek Ami tampon söküm foto/video kareleri geldiğinde bu bölüm gerçek görsellerle değiştirilecek.
-5. Fiyat yoktur. Çözüm talebi yalnızca WhatsApp'a yönlendirir.
+The navigation is SPA-style: top menu switches pages instead of stacking every page vertically.
+Replace BURAYA_EMAIL, BURAYA_ADRES and 905XXXXXXXXX with real contact details before publishing.
+Vehicle artwork is CSS-based so the site works without external image files. Real/generated vehicle photos can later replace .card-art contents.
